@@ -1,12 +1,12 @@
 clc, clearvars, close all
-dest = imread('./target.png');
-source = imread('./source.png');
+dest = imread('./2019-10-29_23-41-24.jpg');
+source = imread('./2019-10-29_23-41-27.jpg');
 
 figure(1)
 imshow(source);
 title('左上and右下定位一个rect（提取域）')
 dot_source = int64(ginput(2)); % 左上and右下定位一个rect（提取域）
-fclose(1);
+
 figure(2)
 imshow(dest); 
 title('左上一点(目标域)')
