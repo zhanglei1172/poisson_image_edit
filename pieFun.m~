@@ -46,48 +46,62 @@ for i = 1:num
 end
 b = zeros(num, 1);
 [id_jj, id_ii] = ind2sub([n, m], 1:num);
-filter = [0 -1 0; -1 4 -1; 0 -1 0];
-grad_source = imfilter(source_copy, filter);
-grad_source = grad_source(source_row, source_col);
-grad_dest = imfilter(dest, filter);
-grad_dest = grad_dest(dot_dest(1, 2):dot_dest(1, 2)+m-1,...
-    dot_dest(1, 1):dot_dest(1, 1)+n-1);
-mask = abs(grad_source) < abs(grad_dest);
-grad_source(mask) = grad_dest(mask);
+% filter = [0 -1 0; -1 4 -1; 0 -1 0];
+% grad_source = imfilter(source_copy, filter);
+% grad_source = grad_source(source_row, source_col);
+% grad_dest = imfilter(dest, filter);
+% grad_dest = grad_dest(dot_dest(1, 2):dot_dest(1, 2)+m-1,...
+%     dot_dest(1, 1):dot_dest(1, 1)+n-1);
+% % mask = abs(grad_source) < abs(grad_dest);
+% % grad_source(mask) = grad_dest(mask);
+% grad_source = 0.6*grad_source + 0.4*grad_dest;
 for i = 1:num
+%% Vpq
     id_j = id_jj(i);
     id_i = id_ii(i);
     b(i) = b(i) + grad_source(id_i, id_j);
-%     try
-%     b(i) = 4*source_copy(id_i, id_j);
-%     % 右
-%     if id_j ~= n
-%         b(i) = b(i) -source_copy(id_i, id_j+1);
-%     else % 边
-%         b(i) = b(i) +dest(dot_dest(1, 2)+id_i,  dot_dest(1, 1)+id_j+1);
-%     end
-%     % 左
-%     if id_j ~= 1
-%         b(i) = b(i) -source_copy(id_i, id_j-1);
-%     else % 边
-%         b(i) = b(i) +dest(dot_dest(1, 2)+id_i,  dot_dest(1, 1)+id_j-1);
-%     end
-%     % 上
-%     if id_i ~= 1
-%         b(i) = b(i) -source_copy(id_i-1, id_j);
-%     else % 边
-%         b(i) = b(i) +dest(dot_dest(1, 2)+id_i-1,  dot_dest(1, 1)+id_j);
-%     end
-%     % 下
-%     if id_i ~= m
-%         b(i) = b(i) -source_copy(id_i+1, id_j);
-%     else % 边
-%         b(i) = b(i) +dest(dot_dest(1, 2)+id_i+1,  dot_dest(1, 1)+id_j);
-%     end
-%     
-%     catch
-%         pause
-%     end
+    % 下
+    source_grad = source_copy(source_row(1)+id_i-1, source_col+id_j-1) - ...
+        source_copy(source_row(1)+id_i, source_col+id_j-1);
+    dest_grad = dest(dot_dest(1, 2)+id_i-1, dot_dest(1, 1)+id_j-1) - ...
+        dest(dot_dest(1, 2)+id_i, dot_dest(1, 1)+id_j-1);
+    if abs(source_grad) < abs(dest_grad)
+        b(i) = b(i) + dest_grad;
+    else
+        b(i) = b(i) + source_grad;
+    end
+    %上
+    source_grad = source_copy(source_row(1)+id_i-1, source_col+id_j-1) - ...
+        source_copy(source_row(1)+id_i-2, source_col+id_j-1);
+    dest_grad = dest(dot_dest(1, 2)+id_i-1, dot_dest(1, 1)+id_j-1) - ...
+        dest(dot_dest(1, 2)+id_i, dot_dest(1, 1)+id_j-1);
+    if abs(source_grad) < abs(dest_grad)
+        b(i) = b(i) + dest_grad;
+    else
+        b(i) = b(i) + source_grad;
+    end
+    
+    source_grad = source_copy(source_row(1)+id_i-1, source_col+id_j-1) - ...
+        source_copy(source_row(1)+id_i, source_col+id_j-1);
+    dest_grad = dest(dot_dest(1, 2)+id_i-1, dot_dest(1, 1)+id_j-1) - ...
+        dest(dot_dest(1, 2)+id_i, dot_dest(1, 1)+id_j-1);
+    if abs(source_grad) < abs(dest_grad)
+        b(i) = b(i) + dest_grad;
+    else
+        b(i) = b(i) + source_grad;
+    end
+    
+    source_grad = source_copy(source_row(1)+id_i-1, source_col+id_j-1) - ...
+        source_copy(source_row(1)+id_i, source_col+id_j-1);
+    dest_grad = dest(dot_dest(1, 2)+id_i-1, dot_dest(1, 1)+id_j-1) - ...
+        dest(dot_dest(1, 2)+id_i, dot_dest(1, 1)+id_j-1);
+    if abs(source_grad) < abs(dest_grad)
+        b(i) = b(i) + dest_grad;
+    else
+        b(i) = b(i) + source_grad;
+    end
+
+%% 边界
     if id_j == n 
         b(i) = b(i) +dest(dot_dest(1, 2)+id_i-1,  dot_dest(1, 1)+id_j);
     end
