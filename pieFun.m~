@@ -46,14 +46,12 @@ for i = 1:num
 end
 b = zeros(num, 1);
 [id_jj, id_ii] = ind2sub([n, m], 1:num);
-filter = [0 -1 0; -1 4 -1; 0 -1 0];
-grad_source = imfilter(source_copy, filter);
+grad_source = imfilter(source_copy, [0 -1 0; -1 4 -1; 0 -1 0]);
 grad_source = grad_source(source_row, source_col);
-grad_dest = imfilter(dest, filter);
+grad_dest = imfilter(dest);
 grad_dest = grad_dest(dot_dest(1, 2):dot_dest(1, 2)+m-1,...
     dot_dest(1, 1):dot_dest(1, 1)+n-1);
-mask = abs(grad_source) < abs(grad_dest);
-% grad_source(mask) = grad_dest(mask);
+abs(grad_source) <
 for i = 1:num
     id_j = id_jj(i);
     id_i = id_ii(i);
@@ -89,16 +87,16 @@ for i = 1:num
 %         pause
 %     end
     if id_j == n 
-        b(i) = b(i) +dest(dot_dest(1, 2)+id_i-1,  dot_dest(1, 1)+id_j);
+        b(i) = b(i) +dest(dot_dest(1, 2)+id_i,  dot_dest(1, 1)+id_j+1);
     end
     if id_j == 1
-        b(i) = b(i) +dest(dot_dest(1, 2)+id_i-1,  dot_dest(1, 1)+id_j-2);
+        b(i) = b(i) +dest(dot_dest(1, 2)+id_i,  dot_dest(1, 1)+id_j-1);
     end
     if id_i == 1 
-        b(i) = b(i) +dest(dot_dest(1, 2)+id_i-2,  dot_dest(1, 1)+id_j-1);
+        b(i) = b(i) +dest(dot_dest(1, 2)+id_i-1,  dot_dest(1, 1)+id_j);
     end
     if id_i == m
-        b(i) = b(i) +dest(dot_dest(1, 2)+id_i,  dot_dest(1, 1)+id_j-1);
+        b(i) = b(i) +dest(dot_dest(1, 2)+id_i+1,  dot_dest(1, 1)+id_j);
     end
 
 %     if (id_j == n || id_j == 1 || id_i == 1 || id_i == m) % 边

@@ -1,6 +1,6 @@
 clc, clearvars, close all
-dest = imread('./2019-10-29_23-41-24.jpg');
-source = imread('./2019-10-29_23-41-27.jpg');
+dest = imread('./target.jpg');
+source = imread('./source.jpg');
 
 figure(1)
 imshow(source);
