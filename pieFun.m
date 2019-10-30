@@ -53,7 +53,7 @@ grad_dest = imfilter(dest, filter);
 grad_dest = grad_dest(dot_dest(1, 2):dot_dest(1, 2)+m-1,...
     dot_dest(1, 1):dot_dest(1, 1)+n-1);
 mask = abs(grad_source) < abs(grad_dest);
-% grad_source(mask) = grad_dest(mask);
+grad_source(mask) = grad_dest(mask);
 for i = 1:num
     id_j = id_jj(i);
     id_i = id_ii(i);

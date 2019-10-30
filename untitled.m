@@ -1,6 +1,6 @@
 clc, clearvars, close all
-dest = imread('./target.jpg');
-source = imread('./source.jpg');
+dest = imread('./target.png');
+source = imread('./source.png');
 
 figure(1)
 imshow(source);
