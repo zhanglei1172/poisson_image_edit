@@ -28,13 +28,14 @@ dot_dest = int64(ginput(1)); % 左上一点
 
 assert(all(dot_dest <= pointMax), '位置超出范围(必须点在左上块区域内)')
 %%
-
+profile on
 result = double(dest);
 for i = 1:3
     result(:, :, i) = pieFun( m, n, double(source(:,:,i))/255.,...
         double(dest(:,:,i))/255. , dot_dest, source_row, source_col);
 end
 result = uint8(result*255);
+profile viewer
 figure()
 imshow(result);
 title('最终融合结果')

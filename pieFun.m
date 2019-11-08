@@ -122,6 +122,13 @@ for i = 1:num
 end
 
 x = A\b;
+
+% X = zeros(size(b));
+% for k = 1:100
+%     for i = 1:num
+%         X(i) = 0.25*(b(i) - A(i,1:i-1)*X(1:i-1) - A(i,i+1:end)*X(i+1:end));
+%     end
+% end
 x = reshape(x, n, m);
 result = dest;
 result(dot_dest(1, 2):dot_dest(1, 2)+m-1, dot_dest(1, 1):dot_dest(1, 1)+n-1) = ...
